@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>Mali Humanitarian Access</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+<script src="js/jquery-2.1.1.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
+
+<style>
+  body { margin:0; padding:0; }
+  #map { position:absolute; top:0; bottom:0; width:100%; height: 350px; }
+
+</style>
+</head>
+<body>
+<div id='map'></div>
+
+
+<script>
+
+//load basemap
+var map = L.map('map').setView([9.7, 30.5], 4);
+L.tileLayer('http://{s}.tiles.mapbox.com/v3/reliefweb.l43d4f5j/{z}/{x}/{y}.png', {
+    maxZoom: 9
+}).addTo(map);
+
+//load security data from ACLED json using conflict icon
+  // load GeoJSON from an external file
+$.getJSON("data/EastAfrica_SecurityIncidents_ACLED_1503.json",function(data){
+  var conflictIcon = L.icon({
+    iconUrl: 'conflict_red.png',
+    iconSize: [10,10]
+  });
+  L.geoJson(data,{
+    pointToLayer: function(feature,latlng){
+    var marker = L.marker(latlng,{icon: conflictIcon});
+    marker.bindPopup('<strong>' + feature.properties.COUNTRY + '</strong>' + '<br/>' + "Location: " + feature.properties.LOCATION + '<br/>' + feature.properties.EVENT_TYPE);
+    return marker;
+    }
+  }).addTo(map);
+});
+
+//adding interaction on mouseover
+
+
+
+
+
+//load country labels
+L.tileLayer('http://{s}.tiles.mapbox.com/v3/reliefweb.l43djggg/{z}/{x}/{y}.png', {
+    maxZoom: 9
+}).addTo(map);
+
+
+
+
+
+
+</script>
+</body>
+</html>
